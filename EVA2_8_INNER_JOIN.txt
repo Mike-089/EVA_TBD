@@ -1,0 +1,571 @@
+EVA2_8_INNER_JOIN
+
+MySQL Shell 8.0.38
+
+Copyright (c) 2016, 2024, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > sql
+ReferenceError: sql is not defined
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@database
+Creating a Classic session to 'root@database'
+Please provide the password for 'root@database':
+MySQL Error 2005 (HY000): Unknown MySQL server host 'database' (11001)
+ MySQL  SQL >
+ MySQL  SQL > ^C
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 10
+Server version: 8.0.39 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > use tbd_e2;
+Default schema set to `tbd_e2`.
+Fetching global names, object names from `tbd_e2` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > use sakila;
+Default schema set to `sakila`.
+Fetching global names, object names from `sakila` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  sakila  SQL > desc payment;
++--------------+-------------------+------+-----+-------------------+-----------------------------------------------+
+| Field        | Type              | Null | Key | Default           | Extra                                         |
++--------------+-------------------+------+-----+-------------------+-----------------------------------------------+
+| payment_id   | smallint unsigned | NO   | PRI | NULL              | auto_increment                                |
+| customer_id  | smallint unsigned | NO   | MUL | NULL              |                                               |
+| staff_id     | tinyint unsigned  | NO   | MUL | NULL              |                                               |
+| rental_id    | int               | YES  | MUL | NULL              |                                               |
+| amount       | decimal(5,2)      | NO   |     | NULL              |                                               |
+| payment_date | datetime          | NO   |     | NULL              |                                               |
+| last_update  | timestamp         | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
++--------------+-------------------+------+-----+-------------------+-----------------------------------------------+
+7 rows in set (0.0033 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > desc customer;
++-------------+-------------------+------+-----+-------------------+-----------------------------------------------+
+| Field       | Type              | Null | Key | Default           | Extra                                         |
++-------------+-------------------+------+-----+-------------------+-----------------------------------------------+
+| customer_id | smallint unsigned | NO   | PRI | NULL              | auto_increment                                |
+| store_id    | tinyint unsigned  | NO   | MUL | NULL              |                                               |
+| first_name  | varchar(45)       | NO   |     | NULL              |                                               |
+| last_name   | varchar(45)       | NO   | MUL | NULL              |                                               |
+| email       | varchar(50)       | YES  |     | NULL              |                                               |
+| address_id  | smallint unsigned | NO   | MUL | NULL              |                                               |
+| active      | tinyint(1)        | NO   |     | 1                 |                                               |
+| create_date | datetime          | NO   |     | NULL              |                                               |
+| last_update | timestamp         | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
++-------------+-------------------+------+-----+-------------------+-----------------------------------------------+
+9 rows in set (0.0021 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > select a.customer_id, a.first_name, a.last_name,
+                                       -> b.amount
+                                       -> from customer a
+                                       -> inner join payment b
+                                       -> on a.customer_id = b.customer_id limit 50;
++-------------+------------+-----------+--------+
+| customer_id | first_name | last_name | amount |
++-------------+------------+-----------+--------+
+|           1 | MARY       | SMITH     |   2.99 |
+|           1 | MARY       | SMITH     |   0.99 |
+|           1 | MARY       | SMITH     |   5.99 |
+|           1 | MARY       | SMITH     |   0.99 |
+|           1 | MARY       | SMITH     |   9.99 |
+|           1 | MARY       | SMITH     |   4.99 |
+|           1 | MARY       | SMITH     |   4.99 |
+|           1 | MARY       | SMITH     |   0.99 |
+|           1 | MARY       | SMITH     |   3.99 |
+|           1 | MARY       | SMITH     |   5.99 |
+|           1 | MARY       | SMITH     |   5.99 |
+|           1 | MARY       | SMITH     |   4.99 |
+|           1 | MARY       | SMITH     |   4.99 |
+|           1 | MARY       | SMITH     |   7.99 |
+|           1 | MARY       | SMITH     |   2.99 |
+|           1 | MARY       | SMITH     |   4.99 |
+|           1 | MARY       | SMITH     |   4.99 |
+|           1 | MARY       | SMITH     |   0.99 |
+|           1 | MARY       | SMITH     |   0.99 |
+|           1 | MARY       | SMITH     |   2.99 |
+|           1 | MARY       | SMITH     |   2.99 |
+|           1 | MARY       | SMITH     |   4.99 |
+|           1 | MARY       | SMITH     |   3.99 |
+|           1 | MARY       | SMITH     |   0.99 |
+|           1 | MARY       | SMITH     |   4.99 |
+|           1 | MARY       | SMITH     |   0.99 |
+|           1 | MARY       | SMITH     |   0.99 |
+|           1 | MARY       | SMITH     |   2.99 |
+|           1 | MARY       | SMITH     |   0.99 |
+|           1 | MARY       | SMITH     |   1.99 |
+|           1 | MARY       | SMITH     |   2.99 |
+|           1 | MARY       | SMITH     |   5.99 |
+|           2 | PATRICIA   | JOHNSON   |   4.99 |
+|           2 | PATRICIA   | JOHNSON   |   2.99 |
+|           2 | PATRICIA   | JOHNSON   |   2.99 |
+|           2 | PATRICIA   | JOHNSON   |   6.99 |
+|           2 | PATRICIA   | JOHNSON   |   4.99 |
+|           2 | PATRICIA   | JOHNSON   |   5.99 |
+|           2 | PATRICIA   | JOHNSON   |   5.99 |
+|           2 | PATRICIA   | JOHNSON   |   5.99 |
+|           2 | PATRICIA   | JOHNSON   |   2.99 |
+|           2 | PATRICIA   | JOHNSON   |   5.99 |
+|           2 | PATRICIA   | JOHNSON   |   4.99 |
+|           2 | PATRICIA   | JOHNSON   |  10.99 |
+|           2 | PATRICIA   | JOHNSON   |   0.99 |
+|           2 | PATRICIA   | JOHNSON   |   6.99 |
+|           2 | PATRICIA   | JOHNSON   |   6.99 |
+|           2 | PATRICIA   | JOHNSON   |   2.99 |
+|           2 | PATRICIA   | JOHNSON   |   0.99 |
+|           2 | PATRICIA   | JOHNSON   |   0.99 |
++-------------+------------+-----------+--------+
+50 rows in set (0.0043 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > select a.customer_id, a.first_name, a.last_name, b.amount from customer a inner join payment b on a.customer_id = b.customer_id group by customer_id limit 50;
+ERROR: 1055 (42000): Expression #4 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'sakila.b.amount' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+ MySQL  localhost:3306 ssl  sakila  SQL > select sum(amount) from payment
+                                       -> where customer_id = 1;
++-------------+
+| sum(amount) |
++-------------+
+|      118.68 |
++-------------+
+1 row in set (0.0036 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > select a.customer_id, a.first_name, a.last_name,sum(b.amount) from customer a inner join payment b on a.customer_id = b.customer_id group by customer_id limit 50;
++-------------+------------+-----------+---------------+
+| customer_id | first_name | last_name | sum(b.amount) |
++-------------+------------+-----------+---------------+
+|           1 | MARY       | SMITH     |        118.68 |
+|           2 | PATRICIA   | JOHNSON   |        128.73 |
+|           3 | LINDA      | WILLIAMS  |        135.74 |
+|           4 | BARBARA    | JONES     |         81.78 |
+|           5 | ELIZABETH  | BROWN     |        144.62 |
+|           6 | JENNIFER   | DAVIS     |         93.72 |
+|           7 | MARIA      | MILLER    |        151.67 |
+|           8 | SUSAN      | WILSON    |         92.76 |
+|           9 | MARGARET   | MOORE     |         89.77 |
+|          10 | DOROTHY    | TAYLOR    |         99.75 |
+|          11 | LISA       | ANDERSON  |        106.76 |
+|          12 | NANCY      | THOMAS    |        103.72 |
+|          13 | KAREN      | JACKSON   |        131.73 |
+|          14 | BETTY      | WHITE     |        117.72 |
+|          15 | HELEN      | HARRIS    |        134.68 |
+|          16 | SANDRA     | MARTIN    |        118.72 |
+|          17 | DONNA      | THOMPSON  |         98.79 |
+|          18 | CAROL      | GARCIA    |         91.78 |
+|          19 | RUTH       | MARTINEZ  |        125.76 |
+|          20 | SHARON     | ROBINSON  |        115.70 |
+|          21 | MICHELLE   | CLARK     |        155.65 |
+|          22 | LAURA      | RODRIGUEZ |        113.78 |
+|          23 | SARAH      | LEWIS     |        119.70 |
+|          24 | KIMBERLY   | LEE       |         95.75 |
+|          25 | DEBORAH    | WALKER    |        115.71 |
+|          26 | JESSICA    | HALL      |        152.66 |
+|          27 | SHIRLEY    | ALLEN     |        126.69 |
+|          28 | CYNTHIA    | YOUNG     |        111.68 |
+|          29 | ANGELA     | HERNANDEZ |        140.64 |
+|          30 | MELISSA    | KING      |        123.66 |
+|          31 | BRENDA     | WRIGHT    |        104.74 |
+|          32 | AMY        | LOPEZ     |        127.71 |
+|          33 | ANNA       | HILL      |         91.79 |
+|          34 | REBECCA    | SCOTT     |         89.76 |
+|          35 | VIRGINIA   | GREEN     |        129.68 |
+|          36 | KATHLEEN   | ADAMS     |         92.73 |
+|          37 | PAMELA     | BAKER     |         95.77 |
+|          38 | MARTHA     | GONZALEZ  |        127.66 |
+|          39 | DEBRA      | NELSON    |        141.71 |
+|          40 | AMANDA     | CARTER    |        110.73 |
+|          41 | STEPHANIE  | MITCHELL  |        118.75 |
+|          42 | CAROLYN    | PEREZ     |        117.70 |
+|          43 | CHRISTINE  | ROBERTS   |         99.76 |
+|          44 | MARIE      | TURNER    |        114.74 |
+|          45 | JANET      | PHILLIPS  |        127.73 |
+|          46 | CATHERINE  | CAMPBELL  |        142.66 |
+|          47 | FRANCES    | PARKER    |        108.78 |
+|          48 | ANN        | EVANS     |         76.83 |
+|          49 | JOYCE      | EDWARDS   |        130.72 |
+|          50 | DIANE      | COLLINS   |        169.65 |
++-------------+------------+-----------+---------------+
+50 rows in set (0.0124 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > select a.customer_id, a.first_name, a.last_name,sum(b.amount) as total from customer a inner join payment b on a.customer_id = b.customer_id group by customer_id limit 50;
++-------------+------------+-----------+--------+
+| customer_id | first_name | last_name | total  |
++-------------+------------+-----------+--------+
+|           1 | MARY       | SMITH     | 118.68 |
+|           2 | PATRICIA   | JOHNSON   | 128.73 |
+|           3 | LINDA      | WILLIAMS  | 135.74 |
+|           4 | BARBARA    | JONES     |  81.78 |
+|           5 | ELIZABETH  | BROWN     | 144.62 |
+|           6 | JENNIFER   | DAVIS     |  93.72 |
+|           7 | MARIA      | MILLER    | 151.67 |
+|           8 | SUSAN      | WILSON    |  92.76 |
+|           9 | MARGARET   | MOORE     |  89.77 |
+|          10 | DOROTHY    | TAYLOR    |  99.75 |
+|          11 | LISA       | ANDERSON  | 106.76 |
+|          12 | NANCY      | THOMAS    | 103.72 |
+|          13 | KAREN      | JACKSON   | 131.73 |
+|          14 | BETTY      | WHITE     | 117.72 |
+|          15 | HELEN      | HARRIS    | 134.68 |
+|          16 | SANDRA     | MARTIN    | 118.72 |
+|          17 | DONNA      | THOMPSON  |  98.79 |
+|          18 | CAROL      | GARCIA    |  91.78 |
+|          19 | RUTH       | MARTINEZ  | 125.76 |
+|          20 | SHARON     | ROBINSON  | 115.70 |
+|          21 | MICHELLE   | CLARK     | 155.65 |
+|          22 | LAURA      | RODRIGUEZ | 113.78 |
+|          23 | SARAH      | LEWIS     | 119.70 |
+|          24 | KIMBERLY   | LEE       |  95.75 |
+|          25 | DEBORAH    | WALKER    | 115.71 |
+|          26 | JESSICA    | HALL      | 152.66 |
+|          27 | SHIRLEY    | ALLEN     | 126.69 |
+|          28 | CYNTHIA    | YOUNG     | 111.68 |
+|          29 | ANGELA     | HERNANDEZ | 140.64 |
+|          30 | MELISSA    | KING      | 123.66 |
+|          31 | BRENDA     | WRIGHT    | 104.74 |
+|          32 | AMY        | LOPEZ     | 127.71 |
+|          33 | ANNA       | HILL      |  91.79 |
+|          34 | REBECCA    | SCOTT     |  89.76 |
+|          35 | VIRGINIA   | GREEN     | 129.68 |
+|          36 | KATHLEEN   | ADAMS     |  92.73 |
+|          37 | PAMELA     | BAKER     |  95.77 |
+|          38 | MARTHA     | GONZALEZ  | 127.66 |
+|          39 | DEBRA      | NELSON    | 141.71 |
+|          40 | AMANDA     | CARTER    | 110.73 |
+|          41 | STEPHANIE  | MITCHELL  | 118.75 |
+|          42 | CAROLYN    | PEREZ     | 117.70 |
+|          43 | CHRISTINE  | ROBERTS   |  99.76 |
+|          44 | MARIE      | TURNER    | 114.74 |
+|          45 | JANET      | PHILLIPS  | 127.73 |
+|          46 | CATHERINE  | CAMPBELL  | 142.66 |
+|          47 | FRANCES    | PARKER    | 108.78 |
+|          48 | ANN        | EVANS     |  76.83 |
+|          49 | JOYCE      | EDWARDS   | 130.72 |
+|          50 | DIANE      | COLLINS   | 169.65 |
++-------------+------------+-----------+--------+
+50 rows in set (0.0031 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > select a.customer_id, a.first_name, a.last_name,sum(b.amount) as total from customer a inner join payment b on a.customer_id = b.customer_id group by customer_id limit 50 ordery by total dec;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ordery by total dec' at line 1
+ MySQL  localhost:3306 ssl  sakila  SQL > select a.customer_id, a.first_name, a.last_name,sum(b.amount) as total from customer a inner join payment b on a.customer_id = b.customer_id group by customer_id ordery by total dec limit1;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ordery by total dec limit1' at line 1
+ MySQL  localhost:3306 ssl  sakila  SQL > select a.customer_id, a.first_name, a.last_name,sum(b.amount) as total from customer a inner join payment b on a.customer_id = b.customer_id group by customer_id ordery by total dec limit 1;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ordery by total dec limit 1' at line 1
+ MySQL  localhost:3306 ssl  sakila  SQL > select a.customer_id, a.first_name, a.last_name,sum(b.amount) as total from customer a inner join payment b on a.customer_id = b.customer_id group by customer_id order by total dec limit 1;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'dec limit 1' at line 1
+ MySQL  localhost:3306 ssl  sakila  SQL > select a.customer_id, a.first_name, a.last_name,sum(b.amount) as total from customer a inner join payment b on a.customer_id = b.customer_id group by customer_id order by total desc limit 1;
++-------------+------------+-----------+--------+
+| customer_id | first_name | last_name | total  |
++-------------+------------+-----------+--------+
+|         526 | KARL       | SEAL      | 221.55 |
++-------------+------------+-----------+--------+
+1 row in set (0.0345 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > select a.customer_id, a.first_name, a.last_name,sum(b.amount) as total from customer a inner join payment b on a.customer_id = b.customer_id group by customer_id order by total asc limit 1;
++-------------+------------+-----------+-------+
+| customer_id | first_name | last_name | total |
++-------------+------------+-----------+-------+
+|         248 | CAROLINE   | BOWMAN    | 50.85 |
++-------------+------------+-----------+-------+
+1 row in set (0.0303 sec)
+ MySQL  localhost:3306 ssl  sakila  SQL > use world;
+Default schema set to `world`.
+Fetching global names, object names from `world` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  world  SQL > show tables;
++-----------------+
+| Tables_in_world |
++-----------------+
+| city            |
+| country         |
+| countrylanguage |
++-----------------+
+3 rows in set (0.0020 sec)
+ MySQL  localhost:3306 ssl  world  SQL > desc city;
++-------------+----------+------+-----+---------+----------------+
+| Field       | Type     | Null | Key | Default | Extra          |
++-------------+----------+------+-----+---------+----------------+
+| ID          | int      | NO   | PRI | NULL    | auto_increment |
+| Name        | char(35) | NO   |     |         |                |
+| CountryCode | char(3)  | NO   | MUL |         |                |
+| District    | char(20) | NO   |     |         |                |
+| Population  | int      | NO   |     | 0       |                |
++-------------+----------+------+-----+---------+----------------+
+5 rows in set (0.0019 sec)
+ MySQL  localhost:3306 ssl  world  SQL > desc world;
+ERROR: 1146 (42S02): Table 'world.world' doesn't exist
+ MySQL  localhost:3306 ssl  world  SQL > desc country;
++----------------+---------------------------------------------------------------------------------------+------+-----+---------+-------+
+| Field          | Type                                                                                  | Null | Key | Default | Extra |
++----------------+---------------------------------------------------------------------------------------+------+-----+---------+-------+
+| Code           | char(3)                                                                               | NO   | PRI |         |       |
+| Name           | char(52)                                                                              | NO   |     |         |       |
+| Continent      | enum('Asia','Europe','North America','Africa','Oceania','Antarctica','South America') | NO   |     | Asia    |       |
+| Region         | char(26)                                                                              | NO   |     |         |       |
+| SurfaceArea    | decimal(10,2)                                                                         | NO   |     | 0.00    |       |
+| IndepYear      | smallint                                                                              | YES  |     | NULL    |       |
+| Population     | int                                                                                   | NO   |     | 0       |       |
+| LifeExpectancy | decimal(3,1)                                                                          | YES  |     | NULL    |       |
+| GNP            | decimal(10,2)                                                                         | YES  |     | NULL    |       |
+| GNPOld         | decimal(10,2)                                                                         | YES  |     | NULL    |       |
+| LocalName      | char(45)                                                                              | NO   |     |         |       |
+| GovernmentForm | char(45)                                                                              | NO   |     |         |       |
+| HeadOfState    | char(60)                                                                              | YES  |     | NULL    |       |
+| Capital        | int                                                                                   | YES  |     | NULL    |       |
+| Code2          | char(2)                                                                               | NO   |     |         |       |
++----------------+---------------------------------------------------------------------------------------+------+-----+---------+-------+
+15 rows in set (0.0021 sec)
+ MySQL  localhost:3306 ssl  world  SQL > select a.name, count(*) from b.city as ciudades from country a inner join city b on a.code = b.countrycode;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from country a inner join city b on a.code = b.countrycode' at line 1
+ MySQL  localhost:3306 ssl  world  SQL > select a.name, count(*) b.city as ciudades from country a inner join city b on a.code = b.countrycode;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.city as ciudades from country a inner join city b on a.code = b.countrycode' at line 1
+ MySQL  localhost:3306 ssl  world  SQL > select a.name, count(*) b.city as ciudades from country a inner join city b on a.code =select a.name, count(*) b.city as ciudades from country a inner join city b on a.code =select a.name, count(*) b.city as ciudades from country a inner join city b on a.code =select a.name, count(*) b.city as ciudades from country a inner join city b on a.code =select a.name, count(*) b.city as ciudades from country a inner join city b on a.code =select a.name, count(*) b.city as ciudades from country a inner join city b on a.code =select a.name, count(*) b.city as ciudades from country a inner join city b on a.code =select a.name, count(*) b.city as ciudades from country a inner join city b on a.code =select a.name, count(*) b.city as ciudades from country a inner join city b on a.code =select a.name, count(*) from b.city as ciudades from country a inner join city b on a.cselect a.customer_id, a.first_name, a.last_name,sum(b.amount) as total from customer a select a.customer_id, a.first_name, a.last_name,sum(b.amount) as total from customer a select a.customer_id, a.first_name, a.last_name,sum(b.amount) as total from customer a select a.customer_id, a.first_name, a.last_name,sum(b.amount) as total from customer a select a.customer_id, a.first_name, a.last_name,sum(b.amount) as total from customer a select a.customer_id, a.first_name, a.last_name,sum(b.amount) as total from customer a select a.customer_id, a.first_name, a.last_name,sum(b.amount) as total from customer a select a.customer_id, a.first_name, a.last_name,sum(b.amount) from customer a inner joiselect sum(amount) from payment where customer_id = 1;                                 select a.customer_id, a.first_name, a.last_name, b.amount from customer a inner join paselect a.customer_id, a.first_name, a.last_name, b.amount from customer a inner join payment b on a.customer_id = b.customer_id limit 50;                                     select a.customer_id, a.first_name, a.last_name, b.amount from customer a inner join payment b on a.customer_id = b.customer_id limit 50;                                     select a.customer_id, a.first_name, a.last_name, b.amount from customer a inner join payment b on a.customer_id = b.customer_id limit
+                                         select a.customer_id, a.first_name, a.last_name, b.amount from customer a inner join paselect a.customer_id, a.first_name, a.last_name, b.amount from customer a inner join paselect a.customer_id, a.first_name, a.last_name, b.amount from customer a inner join paselect a.customer_id, a.first_name, a.last_name, b.amount from customer a inner join paselect a.customer_id, a.first_name, a.last_name, b.amount from customer a inner join paselect a.customer_id, a.first_name, a.last_name, b.amount from customer a inner join paselect a.customer_id, a.first_name, a.last_name, b.amount from customer a inner join paselect a.customer_id, a.first_name, a.last_name, b.amount from customer a inner join paselect a.customer_id, a.first_name, a.last_name, b.amount from customer a inner join paselect a.customer_id, a.first_name, a.last_name, b.amount from customer a inner join   select a.customer_id, a.first_name, a.last_name, b.amount from customer a inner        select a.customer_id, a.first_name, a.last_name, b.amount from customer a              select a.customer_id, a.first_^C    select a.name, count(*) from b.city as ciudades from country a inner join city b on a.code = b.countrycode;             select a.nam
+ MySQL  localhost:3306 ssl  world  SQL > ^C a inner join city b on a.code = b.countrycode;
+ MySQL  localhost:3306 ssl  world  SQL > select a.name, count(*) as ciudades from country a inner join city b on a.code = b.countrycode group by a.code;
++---------------------------------------+----------+
+| name                                  | ciudades |
++---------------------------------------+----------+
+| Aruba                                 |        1 |
+| Afghanistan                           |        4 |
+| Angola                                |        5 |
+| Anguilla                              |        2 |
+| Albania                               |        1 |
+| Andorra                               |        1 |
+| Netherlands Antilles                  |        1 |
+| United Arab Emirates                  |        5 |
+| Argentina                             |       57 |
+| Armenia                               |        3 |
+| American Samoa                        |        2 |
+| Antigua and Barbuda                   |        1 |
+| Australia                             |       14 |
+| Austria                               |        6 |
+| Azerbaijan                            |        4 |
+| Burundi                               |        1 |
+| Belgium                               |        9 |
+| Benin                                 |        4 |
+| Burkina Faso                          |        3 |
+| Bangladesh                            |       24 |
+| Bulgaria                              |       10 |
+| Bahrain                               |        1 |
+| Bahamas                               |        1 |
+| Bosnia and Herzegovina                |        3 |
+| Belarus                               |       16 |
+| Belize                                |        2 |
+| Bermuda                               |        2 |
+| Bolivia                               |        8 |
+| Brazil                                |      250 |
+| Barbados                              |        1 |
+| Brunei                                |        1 |
+| Bhutan                                |        1 |
+| Botswana                              |        2 |
+| Central African Republic              |        1 |
+| Canada                                |       49 |
+| Cocos (Keeling) Islands               |        2 |
+| Switzerland                           |        5 |
+| Chile                                 |       29 |
+| China                                 |      363 |
+| Côte d’Ivoire                         |        5 |
+| Cameroon                              |        7 |
+| Congo, The Democratic Republic of the |       18 |
+| Congo                                 |        2 |
+| Cook Islands                          |        1 |
+| Colombia                              |       38 |
+| Comoros                               |        1 |
+| Cape Verde                            |        1 |
+| Costa Rica                            |        1 |
+| Cuba                                  |       14 |
+| Christmas Island                      |        1 |
+| Cayman Islands                        |        1 |
+| Cyprus                                |        2 |
+| Czech Republic                        |       10 |
+| Germany                               |       93 |
+| Djibouti                              |        1 |
+| Dominica                              |        1 |
+| Denmark                               |        5 |
+| Dominican Republic                    |        6 |
+| Algeria                               |       18 |
+| Ecuador                               |       15 |
+| Egypt                                 |       37 |
+| Eritrea                               |        1 |
+| Western Sahara                        |        1 |
+| Spain                                 |       59 |
+| Estonia                               |        2 |
+| Ethiopia                              |        7 |
+| Finland                               |        7 |
+| Fiji Islands                          |        1 |
+| Falkland Islands                      |        1 |
+| France                                |       40 |
+| Faroe Islands                         |        1 |
+| Micronesia, Federated States of       |        2 |
+| Gabon                                 |        1 |
+| United Kingdom                        |       81 |
+| Georgia                               |        5 |
+| Ghana                                 |        5 |
+| Gibraltar                             |        1 |
+| Guinea                                |        1 |
+| Guadeloupe                            |        2 |
+| Gambia                                |        2 |
+| Guinea-Bissau                         |        1 |
+| Equatorial Guinea                     |        1 |
+| Greece                                |        8 |
+| Grenada                               |        1 |
+| Greenland                             |        1 |
+| Guatemala                             |        4 |
+| French Guiana                         |        1 |
+| Guam                                  |        2 |
+| Guyana                                |        1 |
+| Hong Kong                             |        2 |
+| Honduras                              |        3 |
+| Croatia                               |        4 |
+| Haiti                                 |        4 |
+| Hungary                               |        9 |
+| Indonesia                             |       85 |
+| India                                 |      341 |
+| Ireland                               |        2 |
+| Iran                                  |       67 |
+| Iraq                                  |       15 |
+| Iceland                               |        1 |
+| Israel                                |       14 |
+| Italy                                 |       58 |
+| Jamaica                               |        3 |
+| Jordan                                |        5 |
+| Japan                                 |      248 |
+| Kazakstan                             |       21 |
+| Kenya                                 |        8 |
+| Kyrgyzstan                            |        2 |
+| Cambodia                              |        3 |
+| Kiribati                              |        2 |
+| Saint Kitts and Nevis                 |        1 |
+| South Korea                           |       70 |
+| Kuwait                                |        3 |
+| Laos                                  |        2 |
+| Lebanon                               |        2 |
+| Liberia                               |        1 |
+| Libyan Arab Jamahiriya                |        4 |
+| Saint Lucia                           |        1 |
+| Liechtenstein                         |        2 |
+| Sri Lanka                             |        7 |
+| Lesotho                               |        1 |
+| Lithuania                             |        5 |
+| Luxembourg                            |        1 |
+| Latvia                                |        3 |
+| Macao                                 |        1 |
+| Morocco                               |       22 |
+| Monaco                                |        2 |
+| Moldova                               |        4 |
+| Madagascar                            |        5 |
+| Maldives                              |        1 |
+| Mexico                                |      173 |
+| Marshall Islands                      |        1 |
+| Macedonia                             |        1 |
+| Mali                                  |        1 |
+| Malta                                 |        2 |
+| Myanmar                               |       16 |
+| Mongolia                              |        1 |
+| Northern Mariana Islands              |        1 |
+| Mozambique                            |       12 |
+| Mauritania                            |        2 |
+| Montserrat                            |        1 |
+| Martinique                            |        1 |
+| Mauritius                             |        3 |
+| Malawi                                |        2 |
+| Malaysia                              |       18 |
+| Mayotte                               |        1 |
+| Namibia                               |        1 |
+| New Caledonia                         |        1 |
+| Niger                                 |        3 |
+| Norfolk Island                        |        1 |
+| Nigeria                               |       64 |
+| Nicaragua                             |        4 |
+| Niue                                  |        1 |
+| Netherlands                           |       28 |
+| Norway                                |        5 |
+| Nepal                                 |        5 |
+| Nauru                                 |        2 |
+| New Zealand                           |        9 |
+| Oman                                  |        5 |
+| Pakistan                              |       59 |
+| Panama                                |        2 |
+| Pitcairn                              |        1 |
+| Peru                                  |       22 |
+| Philippines                           |      136 |
+| Palau                                 |        1 |
+| Papua New Guinea                      |        1 |
+| Poland                                |       44 |
+| Puerto Rico                           |        9 |
+| North Korea                           |       13 |
+| Portugal                              |        5 |
+| Paraguay                              |        5 |
+| Palestine                             |        6 |
+| French Polynesia                      |        2 |
+| Qatar                                 |        1 |
+| Réunion                               |        1 |
+| Romania                               |       29 |
+| Russian Federation                    |      189 |
+| Rwanda                                |        1 |
+| Saudi Arabia                          |       24 |
+| Sudan                                 |       12 |
+| Senegal                               |        9 |
+| Singapore                             |        1 |
+| Saint Helena                          |        1 |
+| Svalbard and Jan Mayen                |        1 |
+| Solomon Islands                       |        1 |
+| Sierra Leone                          |        1 |
+| El Salvador                           |        7 |
+| San Marino                            |        2 |
+| Somalia                               |        3 |
+| Saint Pierre and Miquelon             |        1 |
+| Sao Tome and Principe                 |        1 |
+| Suriname                              |        1 |
+| Slovakia                              |        3 |
+| Slovenia                              |        2 |
+| Sweden                                |       15 |
+| Swaziland                             |        1 |
+| Seychelles                            |        1 |
+| Syria                                 |       11 |
+| Turks and Caicos Islands              |        1 |
+| Chad                                  |        2 |
+| Togo                                  |        1 |
+| Thailand                              |       12 |
+| Tajikistan                            |        2 |
+| Tokelau                               |        1 |
+| Turkmenistan                          |        4 |
+| East Timor                            |        1 |
+| Tonga                                 |        1 |
+| Trinidad and Tobago                   |        2 |
+| Tunisia                               |        8 |
+| Turkey                                |       62 |
+| Tuvalu                                |        1 |
+| Taiwan                                |       42 |
+| Tanzania                              |       10 |
+| Uganda                                |        1 |
+| Ukraine                               |       57 |
+| Uruguay                               |        1 |
+| United States                         |      274 |
+| Uzbekistan                            |       17 |
+| Holy See (Vatican City State)         |        1 |
+| Saint Vincent and the Grenadines      |        1 |
+| Venezuela                             |       41 |
+| Virgin Islands, British               |        1 |
+| Virgin Islands, U.S.                  |        1 |
+| Vietnam                               |       22 |
+| Vanuatu                               |        1 |
+| Wallis and Futuna                     |        1 |
+| Samoa                                 |        1 |
+| Yemen                                 |        6 |
+| Yugoslavia                            |        8 |
+| South Africa                          |       44 |
+| Zambia                                |        7 |
+| Zimbabwe                              |        6 |
++---------------------------------------+----------+
+232 rows in set (0.0076 sec)
+ MySQL  localhost:3306 ssl  world  SQL > select a.name, count(*) as ciudades from country a inner join city b on a.code = b.countrycode group by a.code order by ciudades asc limit1;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'limit1' at line 1
+ MySQL  localhost:3306 ssl  world  SQL > select a.name, count(*) as ciudades from country a inner join city b on a.code = b.countrycode group by a.code order by ciudades asc limit 1;
++-------+----------+
+| name  | ciudades |
++-------+----------+
+| Aruba |        1 |
++-------+----------+
+1 row in set (0.0035 sec)
+ MySQL  localhost:3306 ssl  world  SQL > select a.name, count(*) as ciudades from country a inner join city b on a.code = b.countrycode group by a.code order by ciudades desc limit 1;
++-------+----------+
+| name  | ciudades |
++-------+----------+
+| China |      363 |
++-------+----------+
+1 row in set (0.0034 sec)
+ MySQL  localhost:3306 ssl  world  SQL >
